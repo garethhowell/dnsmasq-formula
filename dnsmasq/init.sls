@@ -17,10 +17,6 @@ dnsmasq_conf:
     - context:
         addn_hosts: {{ dnsmasq.dnsmasq_hosts }}
 {%- endif %}
-{%- if salt['pillar.get']('dnsmasq:dnsmasq_ethers') %}
-    - context:
-        read_ethers: True
-{%- endif %}
 
 dnsmasq_conf_dir:
   file.recurse:
