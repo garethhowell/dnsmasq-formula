@@ -17,6 +17,10 @@ dnsmasq_conf:
     - context:
         addn_hosts: {{ dnsmasq.dnsmasq_hosts }}
 {%- endif %}
+{%- if salt['pillar.get']('dnsmasq:dnsmasq_ethers') %}
+    - context:
+        read_ethers: True
+{%- endif %}
 
 dnsmasq_conf_dir:
   file.recurse:
@@ -62,6 +66,21 @@ dnsmasq_addresses:
   file.managed:
     - name: {{ dnsmasq.dnsmasq_addresses }}
     - source: {{ salt['pillar.get']('dnsmasq:dnsmasq_addresses', 'salt://dnsmasq/files/dnsmasq.addresses') }}
+    - user: root
+    - group: {{ dnsmasq.group }}
+    - mode: 644
+    - template: jinja
+    - require:
+      - pkg: dnsmasq
+    - watch_in:
+      - service: dnsmasq
+{%- endif %}
+
+{%- if salt['pillar.get']('dnsmasq:dnsmasq_ethers') %}
+dnsmasq_ethers:
+  file.managed:
+    - name: {{ dnsmasq.dnsmasq_ethers }}
+    - source: {{ salt['pillar.get']('dnsmasq:dnsmasq_ethers', 'salt://dnsmasq/files/dnsmasq.ethers') }}
     - user: root
     - group: {{ dnsmasq.group }}
     - mode: 644

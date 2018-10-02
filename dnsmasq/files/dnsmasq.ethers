@@ -1,0 +1,5 @@
+{%- set dnsmasq = pillar.get('dnsmasq', {}) -%}
+{%- set ethers = dnsmasq.get('ethers', {}) -%}
+{%- for mac, ip in ethers|dictsort %}
+{{ mac }} {{ ip }}
+{% endfor -%}
